@@ -23,7 +23,7 @@
         src: "{{ MACDEV }}/{{ item }}"
         dest: "/home/{{ profile_name }}/{{ item }}"
         owner: "{{ profile_name }}"
-        group: "{{ profile_name }}"
+        group: "{{ profile_group }}"
       loop:
         - .bash_profile
         - .bashrc
@@ -47,7 +47,7 @@
         modification_time: preserve
         access_time: preserve
         owner: "{{ profile_name }}"
-        group: "{{ profile_name }}"
+        group: "{{ profile_group }}"
 
     - name: touch root .hushlogin
       file:
