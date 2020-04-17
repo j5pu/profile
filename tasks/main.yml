@@ -1,0 +1,58 @@
+---
+# tasks file for profile
+- name: block profile
+  block:
+    - name: rsync dir profile.d
+      synchronize:
+        src: "{{ MACDEV }}/.profile.d/"
+        dest: /etc/profile.d
+        copy_links: yes
+        delete: yes
+        recursive: yes
+
+    - name: rsync dir bash_completion.d
+      synchronize:
+        src: /usr/local/etc/bash_completion.d
+        dest: /etc
+        copy_links: yes
+        delete: no
+        recursive: yes
+
+    - name: copy profile files user
+      copy:
+        src: "{{ MACDEV }}/{{ item }}"
+        dest: "/home/{{ profile_name }}/{{ item }}"
+        owner: "{{ profile_name }}"
+        group: "{{ profile_name }}"
+      loop:
+        - .bash_profile
+        - .bashrc
+        - .inputrc
+        - .profile
+
+    - name: copy profile files root
+      copy:
+        src: "{{ MACDEV }}/{{ item }}"
+        dest: "/root"
+      loop:
+        - .bash_profile
+        - .bashrc
+        - .inputrc
+        - .profile
+
+    - name: touch user .hushlogin
+      file:
+        path: "/home/{{ profile_name }}/.hushlogin"
+        state: touch
+        modification_time: preserve
+        access_time: preserve
+        owner: "{{ profile_name }}"
+        group: "{{ profile_name }}"
+
+    - name: touch root .hushlogin
+      file:
+        path: "/root/.hushlogin"
+        state: touch
+        modification_time: preserve
+        access_time: preserve
+  when: ansible_distribution != 'MacOSX'
