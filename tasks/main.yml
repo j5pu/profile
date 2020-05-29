@@ -8,6 +8,8 @@
         dest: /etc/profile.d
         copy_links: yes
         delete: yes
+        owner: no
+        group: no
         recursive: yes
 
     - name: rsync dir bash_completion.d
@@ -16,6 +18,8 @@
         dest: /etc
         copy_links: yes
         delete: no
+        owner: no
+        group: no
         recursive: yes
 
     - name: copy profile files user
